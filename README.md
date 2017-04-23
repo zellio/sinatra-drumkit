@@ -1,11 +1,6 @@
 # Sinatra::Drumkit
 
-Welcome to your new gem! In this directory, you'll find the files you need to
-be able to package up your Ruby library into a gem. Put your Ruby code in the
-file `lib/sinatra/drumkit`. To experiment with that code, run `bin/console`
-for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+A simple framework for auto loading model and controller code in sinatra apps.
 
 ## Installation
 
@@ -17,21 +12,56 @@ gem 'sinatra-drumkit'
 
 And then execute:
 
-    $ bundle
+```shell
+$ bundle
+```
 
 Or install it yourself as:
 
-    $ gem install sinatra-drumkit
+```shell
+$ gem install sinatra-drumkit
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+`Sinatra::Drumkit` provides simple auto-loading mechanisms to `sinatra`. Once
+the `module` is registered, one can configure it via the `rhythm`
+method. `Drumkit` will make a best guess based on the `root` setting of the
+application.
+
+```ruby
+class App < Sinatra::Base
+  set :root, -> { File.expand_path(__dir__) }
+
+  register Sinatra::Drumkit
+  rhythm namespace: App
+
+  # Models are now auto-loaded into App::Model...
+  # Controllers have been executed in the context of the current app
+end
+```
+
+Generally it search `PROJECT_ROOT/app/models` for model code and
+`PROJECT_ROOT/app/controllers` for controller code.
+
+One will need to set the parent name space for Models which will subsequently
+be loaded into the `Namespace::Model` module.
+
+Controllers are loaded and executed in the context of the application so they
+can be written as though they were in the body of the `siantra` app.
+
+```
+# file: ./app/controllers/index.rb
+
+get /
+  [200, {}, 'Hello world!']
+end
+```
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then,
-run `rake spec` to run the tests. You can also run `bin/console` for an
-interactive prompt that will allow you to experiment.
+After checking out the repo, run `bundle update` to install
+dependencies. Then, run `rake spec` to run the tests.
 
 To install this gem onto your local machine, run `bundle exec rake
 install`. To release a new version, update the version number in `version.rb`,
