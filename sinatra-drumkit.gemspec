@@ -5,25 +5,17 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'sinatra/drumkit/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'sinatra-drumkit'
-  spec.version       = Sinatra::Drumkit::VERSION
-  spec.authors       = ['Zachary Elliott']
-  spec.email         = ['contact@zell.io']
+  spec.name = 'sinatra-drumkit'
+  spec.version = Sinatra::Drumkit::VERSION
+  spec.authors = ['Zachary Elliott']
+  spec.email = ['contact@zell.io']
 
-  spec.summary       = 'Provide clean MVC autoloading for sinatra'
-  spec.description   = 'Provide clean MVC autoloading for sinatra'
-  spec.homepage      = 'https://github.com/zellio/sinatra-drumkit'
-  spec.license       = 'MIT'
+  spec.summary = 'Provide clean MVC autoloading for sinatra'
+  spec.description = "Provide autoloading of Model classes and Controller for
+  sinatra to allow for simpler writing of MVC web applications."
 
-  # Prevent pushing this gem to RubyGems.org. To allow pushes either set the
-  # 'allowed_push_host' to allow pushing to a single host or delete this
-  # section to allow pushing to any host.
-  if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = 'http://localhost.lan'
-  else
-    raise 'RubyGems 2.0 or newer is required to protect against ' \
-      'public gem pushes.'
-  end
+  spec.homepage = 'https://github.com/zellio/sinatra-drumkit'
+  spec.license = 'MIT'
 
   spec.files = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
@@ -35,4 +27,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler', '~> 1.14'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
+
+  spec.add_dependency 'sinatra', '~> 1.4'
 end
