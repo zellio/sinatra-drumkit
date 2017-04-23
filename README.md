@@ -50,7 +50,7 @@ be loaded into the `Namespace::Model` module.
 Controllers are loaded and executed in the context of the application so they
 can be written as though they were in the body of the `siantra` app.
 
-```
+```ruby
 # file: ./app/controllers/index.rb
 
 get /
