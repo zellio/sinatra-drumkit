@@ -11,21 +11,30 @@ module Sinatra
       model_dir ||= File.join(app_dir, 'models')
       controller_dir ||= File.join(app_dir, 'controllers')
 
-      model_module = Module.new
-      model_module.define_singleton_method(
-        :const_missing, lambda { |const|
-          @searched ||= {}
-          raise "Class not found: #{const}" if @searched[const]
-          @searched[const] = true
-          require File.join(model_dir, "#{const.to_s.downcase}.rb")
-          klass = const_get(const)
-          raise "Class not found: #{const}" unless klass
-          klass
-        }
-      )
+      model_module = model_autoloader(model_dir)
       namespace.const_set(:Model, model_module)
 
-      Dir[::File.join(controller_dir, '*.rb')].each do |file|
+      load_controllers(controller_dir)
+    end
+
+    private
+
+    def model_autoloader(load_dir)
+      Module.new do
+        define_singleton_method(
+          :const_missing, lambda { |const|
+            @searched ||= {}
+            raise "Class not found: #{const}" if @searched[const]
+            require File.join(load_dir, "#{const.to_s.downcase}.rb")
+            @searched[const] = true
+            const_get(const) || raise("Class not found: #{const}")
+          }
+        )
+      end
+    end
+
+    def load_controllers(load_dir)
+      Dir[::File.join(load_dir, '*.rb')].each do |file|
         instance_eval(File.read(file), file)
       end
     end
