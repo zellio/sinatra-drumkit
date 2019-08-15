@@ -25,7 +25,14 @@ module Sinatra
           :const_missing, lambda { |const|
             @searched ||= {}
             raise "Class not found: #{const}" if @searched[const]
-            require File.join(load_dir, "#{const.to_s.downcase}.rb")
+            filename = const.to_s
+                         .gsub('::', '/')
+                         .gsub(/([A-Z\d]+)([A-Z][a-z])/, '\1_\2')
+                         .gsub(/([a-z\d])([A-Z])/, '\1_\2')
+                         .downcase
+            filepath = File.join(load_dir, "#{filename}.rb")
+            raise("Class file \"#{filepath}\" for #{const}") unless File.readable?(filepath)
+            require filepath
             @searched[const] = true
             const_get(const) || raise("Class not found: #{const}")
           }
