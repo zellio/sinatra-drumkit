@@ -34,7 +34,7 @@ module Sinatra
     end
 
     def load_controllers(load_dir)
-      Dir[::File.join(load_dir, '*.rb')].each do |file|
+      Dir[::File.join(load_dir, '**/*.rb')].each do |file|
         instance_eval(File.read(file), file)
       end
     end
