@@ -1,5 +1,5 @@
 module Sinatra
   module Drumkit
-    VERSION = '0.2.0'.freeze
+    VERSION = '2.0.1'.freeze
   end
 end
